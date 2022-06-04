@@ -1,0 +1,56 @@
+﻿@model SchoolProject.Models.Classes.User
+
+@{
+	ViewData["Title"] = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detallar</h1>
+
+<div>
+	<h4>Tələbə</h4>
+	<hr />
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Name)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Name)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Surname)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Surname)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Number)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Number)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Email)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Email)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Type)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Type)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Passive)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Passive)
+		</dd>
+	</dl>
+</div>
+<div>
+	<a asp-action="Edit" asp-route-id="@Model?.Id">Dəyiş</a> |
+	<a asp-action="Index">Geri qayıt</a>
+</div>
+
