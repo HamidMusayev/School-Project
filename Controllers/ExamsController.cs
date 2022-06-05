@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using SchoolProject.Models.Classes;
-using SchoolProject.Models.Contexts;
+using SchoolProject.Services.Abstract;
 
 namespace SchoolProject.Controllers
 {
     public class ExamsController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly IExamService _service;
+        private readonly ILessonService _lessonService;
 
-        public ExamsController(SchoolContext context)
+        public ExamsController(IExamService service, ILessonService lessonService)
         {
-            _context = context;
+            _service = service;
+            _lessonService = lessonService;
         }
 
         // GET: Exams
@@ -24,12 +21,7 @@ namespace SchoolProject.Controllers
         {
             TempData["ActivePage"] = "5";
 
-            return _context.Exams != null
-                ? View(await _context.Exams
-                .Include(e => e.Lesson)
-                .Include(e => e.Lesson!.Class)
-                .Include(e => e.Lesson!.Teacher).ToListAsync())
-                : Problem("Entity set 'SchoolContext.Exams'  is null.");
+            return View(await _service.GetAllAsync());
         }
 
         // GET: Exams/Create
@@ -49,8 +41,7 @@ namespace SchoolProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(exam);
-                await _context.SaveChangesAsync();
+                await _service.AddAsync(exam);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -60,23 +51,18 @@ namespace SchoolProject.Controllers
 
         private async Task SetViewBagData()
         {
-            ViewBag.Lessons = new SelectList(await _context.Lessons
-                .Where(c => c.Passive == false)
-                .Include(l => l.Class)
-                .OrderBy(l => l.Class!.Id)
-                .ToListAsync(), "Id", "ExamAddDropdownName");
+            ViewBag.Lessons = new SelectList(await _lessonService.GetAllAsync(), "Id", "ExamAddDropdownName");
         }
 
         // GET: Exams/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Exams == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var exam = await _context.Exams
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Exam? exam = await _service.GetByIdAsync(id.GetValueOrDefault());
 
             if (exam == null)
             {
@@ -91,36 +77,24 @@ namespace SchoolProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Exams == null)
-            {
-                return Problem("Entity set 'SchoolContext.Exams'  is null.");
-            }
-            var exam = await _context.Exams.FindAsync(id);
+            Exam? exam = await _service.GetByIdAsync(id);
             if (exam != null)
             {
-                _context.Exams.Remove(exam);
+                await _service.DeleteAsync(exam);
             }
 
-            await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ExamExists(int id)
-        {
-            return (_context.Exams?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
         // GET: Exams/Cancel/5
         public async Task<IActionResult> Cancel(int? id)
         {
-            if (id == null || _context.Exams == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var exam = await _context.Exams
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Exam? exam = await _service.GetByIdAsync(id.GetValueOrDefault());
             if (exam == null)
             {
                 return NotFound();
@@ -128,9 +102,7 @@ namespace SchoolProject.Controllers
 
             exam.IsCanceled = true;
 
-            _context.Exams.Update(exam);
-
-            await _context.SaveChangesAsync();
+            await _service.UpdateAsync(exam);
 
             return RedirectToAction(nameof(Index));
         }

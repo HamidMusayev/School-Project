@@ -1,18 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using SchoolProject.Models.Classes;
-using SchoolProject.Models.Contexts;
+using SchoolProject.Services.Abstract;
 
 namespace SchoolProject.Controllers
 {
     public class LessonsController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly ILessonService _service;
+        private readonly IClassService _classService;
+        private readonly IStudentService _studentService;
 
-        public LessonsController(SchoolContext context)
+        public LessonsController(ILessonService service, IClassService classService, IStudentService studentService)
         {
-            _context = context;
+            _service = service;
+            _classService = classService;
+            _studentService = studentService;
         }
 
         // GET: Lessons
@@ -20,15 +23,8 @@ namespace SchoolProject.Controllers
         {
             TempData["ActivePage"] = "4";
 
-            if (_context.Lessons == null)
-            {
-                return NotFound();
-            }
 
-            return View(await _context.Lessons.Where(l => l.Passive == false)
-                .Include(l => l.Class)
-                .Include(l => l.Teacher)
-                .ToListAsync());
+            return View(await _service.GetAllAsync());
         }
 
         // GET: Lessons/Create
@@ -47,8 +43,8 @@ namespace SchoolProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(lesson);
-                await _context.SaveChangesAsync();
+                await _service.AddAsync(lesson);
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -58,16 +54,12 @@ namespace SchoolProject.Controllers
         // GET: Lessons/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Lessons == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Lesson? lesson = await _context.Lessons
-                .Where(l => l.Id == id)
-                .Include(l => l.Class)
-                .Include(l => l.Teacher)
-                .FirstOrDefaultAsync();
+            Lesson? lesson = await _service.GetByIdAsync(id.GetValueOrDefault());
 
             await SetViewBagData();
 
@@ -81,8 +73,8 @@ namespace SchoolProject.Controllers
 
         private async Task SetViewBagData()
         {
-            ViewBag.Classes = new SelectList(await _context.Classes.Where(c => c.Passive == false).ToListAsync(), "Id", "Name");
-            ViewBag.Teachers = new SelectList(await _context.Users.Where(c => c.Passive == false && c.Type == Models.Enums.UserType.Müəllim).ToListAsync(), "Id", "Name");
+            ViewBag.Classes = new SelectList(await _classService.GetAllAsync(), "Id", "Name");
+            ViewBag.Teachers = new SelectList(await _studentService.GetAllAsync(), "Id", "Name");
         }
 
         // POST: Lessons/Edit/5
@@ -99,22 +91,7 @@ namespace SchoolProject.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(lesson);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!LessonExists(lesson.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _service.UpdateAsync(lesson);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -125,13 +102,13 @@ namespace SchoolProject.Controllers
         // GET: Lessons/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Lessons == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Lesson? lesson = await _context.Lessons
-                .FirstOrDefaultAsync(m => m.Id == id);
+            Lesson? lesson = await _service.GetByIdAsync(id.GetValueOrDefault());
+
             if (lesson == null)
             {
                 return NotFound();
@@ -145,24 +122,14 @@ namespace SchoolProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Lessons == null)
-            {
-                return Problem("Entity set 'SchoolContext.Lessons'  is null.");
-            }
-            Lesson? lesson = await _context.Lessons.FindAsync(id);
+            Lesson? lesson = await _service.GetByIdAsync(id);
+
             if (lesson != null)
             {
-                _context.Lessons.Remove(lesson);
+                await _service.DeleteAsync(lesson);
             }
 
-            await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool LessonExists(int id)
-        {
-            return (_context.Lessons?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

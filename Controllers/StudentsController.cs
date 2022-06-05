@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using SchoolProject.Models.Classes;
-using SchoolProject.Models.Contexts;
+using SchoolProject.Services.Abstract;
 
 namespace SchoolProject.Controllers
 {
     public class StudentsController : Controller
     {
-        private readonly SchoolContext _context;
+        private readonly IStudentService _service;
+        private readonly IClassService _classService;
 
-        public StudentsController(SchoolContext context)
+        public StudentsController(IStudentService service, IClassService classService)
         {
-            _context = context;
+            _service = service;
+            _classService = classService;
         }
 
         // GET: Students
@@ -20,28 +21,18 @@ namespace SchoolProject.Controllers
         {
             TempData["ActivePage"] = "2";
 
-            if (_context.Users == null)
-            {
-                return NotFound();
-            }
-
-            return View(await _context.Users
-                .Where(u => u.Type == Models.Enums.UserType.Tələbə && u.Passive == false)
-                .Include(u => u.Class)
-                .ToListAsync());
+            return View(await _service.GetAllAsync());
         }
 
         // GET: Students/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            User? user = await _context.Users
-                .Include(u => u.Class)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            User? user = await _service.GetByIdAsync(id.GetValueOrDefault());
 
             if (user == null)
             {
@@ -70,8 +61,7 @@ namespace SchoolProject.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
+                await _service.UpdateAsync(user);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -84,12 +74,12 @@ namespace SchoolProject.Controllers
         {
             await SetViewBagData();
 
-            if (id == null || _context.Users == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            User? user = await _context.Users.FindAsync(id);
+            User? user = await _service.GetByIdAsync(id.GetValueOrDefault());
 
             if (user == null)
             {
@@ -101,7 +91,7 @@ namespace SchoolProject.Controllers
 
         private async Task SetViewBagData()
         {
-            ViewBag.Classes = new SelectList(await _context.Classes.Where(c => c.Passive == false).ToListAsync(), "Id", "Name");
+            ViewBag.Classes = new SelectList(await _classService.GetAllAsync(), "Id", "Name");
         }
 
         // POST: Students/Edit/5
@@ -120,23 +110,7 @@ namespace SchoolProject.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(user);
-
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _service.UpdateAsync(user);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -146,13 +120,12 @@ namespace SchoolProject.Controllers
         // GET: Students/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            User? user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            User? user = await _service.GetByIdAsync(id.GetValueOrDefault());
 
             if (user == null)
             {
@@ -167,25 +140,14 @@ namespace SchoolProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Users == null)
-            {
-                return Problem("Entity set 'SchoolContext.Users'  is null.");
-            }
-            User? user = await _context.Users.FindAsync(id);
+            User? user = await _service.GetByIdAsync(id);
 
             if (user != null)
             {
-                _context.Users.Remove(user);
+                await _service.DeleteAsync(user);
             }
 
-            await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool UserExists(int id)
-        {
-            return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
