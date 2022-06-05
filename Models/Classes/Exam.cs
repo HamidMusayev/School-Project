@@ -8,6 +8,7 @@ namespace SchoolProject.Models.Classes
         public int Id { get; set; }
         [Display(Name = "Dərs")]
         public Lesson? Lesson { get; set; }
+        public int LessonId { get; set; }
         [Required]
         [Display(Name = "Başlama Tarixi")]
         public DateTime ExamStartDate { get; set; }

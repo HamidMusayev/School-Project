@@ -34,7 +34,7 @@
 								@Html.DisplayNameFor(model => model.Email)
 							</th>
 							<th>
-								@Html.DisplayNameFor(model => model.Class.Name)
+								@Html.DisplayNameFor(model => model.Class!.Name)
 							</th>
 							<th></th>
 						</tr>
@@ -56,7 +56,7 @@
 									@Html.DisplayFor(modelItem => item.Email)
 								</td>
 								<td>
-									@Html.DisplayFor(modelItem => item.Class.Name)
+									@Html.DisplayFor(modelItem => item.Class!.Name)
 								</td>
 								<td>
 									<a asp-action="Edit" asp-route-id="@item.Id">Dəyiş</a> |

@@ -64,10 +64,8 @@ namespace SchoolProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Number,Email,Class")] User user)
+        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Number,Email,ClassId")] User user)
         {
-            user.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
-
             user.Type = Models.Enums.UserType.Tələbə;
 
             if (ModelState.IsValid)
@@ -111,14 +109,12 @@ namespace SchoolProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Number,Email,Class,Passive")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ClassId,Name,Surname,Number,Email,Passive")] User user)
         {
             if (id != user.Id)
             {
                 return NotFound();
             }
-
-            user.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
 
             user.Type = Models.Enums.UserType.Tələbə;
 

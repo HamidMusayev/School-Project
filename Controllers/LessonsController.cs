@@ -43,11 +43,8 @@ namespace SchoolProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Passive,Teacher,Class")] Lesson lesson)
+        public async Task<IActionResult> Create([Bind("Id,Name,Passive,TeacherId,ClassId")] Lesson lesson)
         {
-            lesson.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
-            lesson.Teacher = await _context.Users.FindAsync(int.Parse(Request.Form["Teacher"].First()));
-
             if (ModelState.IsValid)
             {
                 _context.Add(lesson);
@@ -93,15 +90,12 @@ namespace SchoolProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Passive,Class,Teacher")] Lesson lesson)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Passive,ClassId,TeacherId")] Lesson lesson)
         {
             if (id != lesson.Id)
             {
                 return NotFound();
             }
-
-            lesson.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
-            lesson.Teacher = await _context.Users.FindAsync(int.Parse(Request.Form["Teacher"].First()));
 
             if (ModelState.IsValid)
             {

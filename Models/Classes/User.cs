@@ -26,8 +26,8 @@ namespace SchoolProject.Models.Classes
         [Required]
         [Display(Name = "Tip")]
         public UserType Type { get; set; }
-        [Display(Name = "Sinif")]
         public Class? Class { get; set; }
+        [Display(Name = "Sinif")]
         public int? ClassId { get; set; }
         [Display(Name = "Passiv")]
         public bool Passive { get; set; }

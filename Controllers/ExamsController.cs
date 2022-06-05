@@ -22,6 +22,8 @@ namespace SchoolProject.Controllers
         // GET: Exams
         public async Task<IActionResult> Index()
         {
+            TempData["ActivePage"] = "5";
+
             return _context.Exams != null
                 ? View(await _context.Exams
                 .Include(e => e.Lesson)
@@ -43,10 +45,8 @@ namespace SchoolProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ExamStartDate,ExamEndDate,IsCanceled,Lesson")] Exam exam)
+        public async Task<IActionResult> Create([Bind("Id,ExamStartDate,ExamEndDate,IsCanceled,LessonId")] Exam exam)
         {
-            exam.Lesson = await _context.Lessons.FindAsync(int.Parse(Request.Form["Lesson"].First()));
-
             if (ModelState.IsValid)
             {
                 _context.Add(exam);
