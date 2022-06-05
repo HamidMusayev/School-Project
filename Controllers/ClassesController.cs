@@ -17,6 +17,8 @@ namespace SchoolProject.Controllers
         // GET: Classes
         public async Task<IActionResult> Index()
         {
+            TempData["ActivePage"] = "3";
+
             if (_context.Users == null)
             {
                 return NotFound();
@@ -70,6 +72,7 @@ namespace SchoolProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(@class);
         }
 
@@ -86,6 +89,7 @@ namespace SchoolProject.Controllers
             {
                 return NotFound();
             }
+
             return View(@class);
         }
 
@@ -119,8 +123,10 @@ namespace SchoolProject.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(@class);
         }
 
@@ -134,6 +140,7 @@ namespace SchoolProject.Controllers
 
             Class? @class = await _context.Classes
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (@class == null)
             {
                 return NotFound();
@@ -152,12 +159,14 @@ namespace SchoolProject.Controllers
                 return Problem("Entity set 'SchoolContext.Classes'  is null.");
             }
             Class? @class = await _context.Classes.FindAsync(id);
+
             if (@class != null)
             {
                 _context.Classes.Remove(@class);
             }
 
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

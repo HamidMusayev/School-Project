@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolProject.Models.Classes
 {
-    public class Lesson
+    public partial class Lesson
     {
         [Key]
         public int Id { get; set; }
@@ -18,5 +19,11 @@ namespace SchoolProject.Models.Classes
         public int TeacherId { get; set; }
         [Display(Name = "Passiv")]
         public bool Passive { get; set; }
+    }
+
+    public partial class Lesson
+    {
+        [NotMapped]
+        public string ExamAddDropdownName { get { return $"Sinif: {Class?.Name}, Fənn: {Name}"; } }
     }
 }

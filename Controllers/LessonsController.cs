@@ -18,6 +18,8 @@ namespace SchoolProject.Controllers
         // GET: Lessons
         public async Task<IActionResult> Index()
         {
+            TempData["ActivePage"] = "4";
+
             if (_context.Lessons == null)
             {
                 return NotFound();
@@ -52,6 +54,7 @@ namespace SchoolProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(lesson);
         }
 
@@ -82,7 +85,7 @@ namespace SchoolProject.Controllers
         private async Task SetViewBagData()
         {
             ViewBag.Classes = new SelectList(await _context.Classes.Where(c => c.Passive == false).ToListAsync(), "Id", "Name");
-            ViewBag.Teachers = new SelectList(await _context.Users.Where(c => c.Passive == false).ToListAsync(), "Id", "Name");
+            ViewBag.Teachers = new SelectList(await _context.Users.Where(c => c.Passive == false && c.Type == Models.Enums.UserType.Müəllim).ToListAsync(), "Id", "Name");
         }
 
         // POST: Lessons/Edit/5
@@ -118,8 +121,10 @@ namespace SchoolProject.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(lesson);
         }
 
@@ -157,6 +162,7 @@ namespace SchoolProject.Controllers
             }
 
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

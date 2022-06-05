@@ -18,6 +18,8 @@ namespace SchoolProject.Controllers
         // GET: Students
         public async Task<IActionResult> Index()
         {
+            TempData["ActivePage"] = "2";
+
             if (_context.Users == null)
             {
                 return NotFound();
@@ -53,6 +55,7 @@ namespace SchoolProject.Controllers
         public async Task<IActionResult> CreateAsync()
         {
             await SetViewBagData();
+
             return View();
         }
 
@@ -71,8 +74,10 @@ namespace SchoolProject.Controllers
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(user);
         }
 
@@ -87,10 +92,12 @@ namespace SchoolProject.Controllers
             }
 
             User? user = await _context.Users.FindAsync(id);
+
             if (user == null)
             {
                 return NotFound();
             }
+
             return View(user);
         }
 
@@ -120,6 +127,7 @@ namespace SchoolProject.Controllers
                 try
                 {
                     _context.Update(user);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -133,6 +141,7 @@ namespace SchoolProject.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
@@ -148,10 +157,12 @@ namespace SchoolProject.Controllers
 
             User? user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (user == null)
             {
                 return NotFound();
             }
+
             return View(user);
         }
 
@@ -165,11 +176,14 @@ namespace SchoolProject.Controllers
                 return Problem("Entity set 'SchoolContext.Users'  is null.");
             }
             User? user = await _context.Users.FindAsync(id);
+
             if (user != null)
             {
                 _context.Users.Remove(user);
             }
+
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

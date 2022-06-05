@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace SchoolProject.Migrations
 {
-    public partial class InitialContext : Migration
+    public partial class st : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,6 +24,28 @@ namespace SchoolProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Exam",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LessonId = table.Column<int>(type: "int", nullable: false),
+                    ExamStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExamEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsCanceled = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Exam", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Exam_Class_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Class",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -33,7 +56,7 @@ namespace SchoolProject.Migrations
                     Number = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    ClassId = table.Column<int>(type: "int", nullable: false),
+                    ClassId = table.Column<int>(type: "int", nullable: true),
                     Passive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -43,35 +66,6 @@ namespace SchoolProject.Migrations
                         name: "FK_User_Class_ClassId",
                         column: x => x.ClassId,
                         principalTable: "Class",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Exam",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClassId = table.Column<int>(type: "int", nullable: false),
-                    TeacherId = table.Column<int>(type: "int", nullable: false),
-                    ExamStartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExamEndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsCanceled = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Exam", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Exam_Class_ClassId",
-                        column: x => x.ClassId,
-                        principalTable: "Class",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Exam_User_TeacherId",
-                        column: x => x.TeacherId,
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -133,14 +127,9 @@ namespace SchoolProject.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exam_ClassId",
+                name: "IX_Exam_LessonId",
                 table: "Exam",
-                column: "ClassId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Exam_TeacherId",
-                table: "Exam",
-                column: "TeacherId");
+                column: "LessonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lesson_ClassId",

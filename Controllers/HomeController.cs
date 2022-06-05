@@ -20,16 +20,30 @@ namespace SchoolProject.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
+            TempData["ActivePage"] = "1";
+
             ViewBag.StudentCount = await _context.Users.CountAsync(u => u.Type == Models.Enums.UserType.Tələbə && u.Passive == false);
             ViewBag.TeacherCount = await _context.Users.CountAsync(u => u.Type == Models.Enums.UserType.Müəllim && u.Passive == false);
             ViewBag.ClassCount = await _context.Classes.CountAsync(u => u.Passive == false);
             ViewBag.ExamCount = await _context.Exams.CountAsync(u => u.IsCanceled == false);
 
             //SESSIONDAN OXUNACAQ, TEST UCUN SECILIB
-            User sessionUser = await _context.Users.SingleAsync(u => u.Name == "Hamid");
+            User? sessionUser = await _context.Users.SingleOrDefaultAsync(u => u.Name == "Hamid");
 
             if (sessionUser == null || _context.Users == null)
             {
+                //EGER BD BOSDURSA FIRST TIME TEST UCUN ELAVE ET VE SEHIFENI YENILE
+                await _context.AddAsync(new User
+                {
+                    Email = "hemidvmusayev@gmail.com",
+                    Name = "Hamid",
+                    Surname = "Musayev",
+                    Number = "0508218170",
+                    Type = Models.Enums.UserType.Müəllim,
+                    Passive = false,
+                });
+                await _context.SaveChangesAsync();
+
                 return NotFound();
             }
 

@@ -38,36 +38,36 @@
 				<ul class="menu">
 					<li class="sidebar-title">Menu</li>
 
-					<li class="sidebar-item active ">
+					<li class="sidebar-item @(TempData["ActivePage"]?.ToString() == "1" ? "active" : "")">
 						<a asp-controller="Home" asp-action="Index" class='sidebar-link'>
 							<i class="bi bi-grid-fill"></i>
 							<span>Əsas səhifə</span>
 						</a>
 					</li>
 
-					<li class="sidebar-item ">
+					<li class="sidebar-item @(TempData["ActivePage"]?.ToString() == "2" ? "active" : "")">
 						<a asp-controller="Students" asp-action="Index" class='sidebar-link'>
 							<i class="bi bi-people-fill"></i>
 							<span>Tələbələr</span>
 						</a>
 					</li>
 
-					<li class="sidebar-item ">
+					<li class="sidebar-item @(TempData["ActivePage"]?.ToString() == "3" ? "active" : "")">
 						<a asp-controller="Classes" asp-action="Index" class='sidebar-link'>
 							<i class="bi bi-collection-fill"></i>
 							<span>Siniflər</span>
 						</a>
 					</li>
 
-					<li class="sidebar-item ">
+					<li class="sidebar-item @(TempData["ActivePage"]?.ToString() == "4" ? "active" : "")">
 						<a asp-controller="Lessons" asp-action="Index" class='sidebar-link'>
 							<i class="bi bi-calendar-fill"></i>
 							<span>Dərslər</span>
 						</a>
 					</li>
 
-					<li class="sidebar-item ">
-						<a href="#" class='sidebar-link'>
+					<li class="sidebar-item @(TempData["ActivePage"]?.ToString() == "5" ? "active" : "")">
+						<a asp-controller="Exams" asp-action="Index" class='sidebar-link'>
 							<i class="bi bi-grid-1x2-fill"></i>
 							<span>İmtahanlar</span>
 						</a>

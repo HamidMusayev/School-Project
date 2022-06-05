@@ -23,8 +23,8 @@ namespace SchoolProject.Models.Contexts
             modelBuilder.Entity<Exam>().ToTable("Exam");
             modelBuilder.Entity<Result>().ToTable("Result");
 
-            modelBuilder.Entity<Exam>().HasOne(e => e.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Exam>().HasOne(e => e.Class).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<User>().HasOne(e => e.Class).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Exam>().HasOne(e => e.Lesson).WithMany().OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Lesson>().HasOne(l => l.Class).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Lesson>().HasOne(l => l.Teacher).WithMany().OnDelete(DeleteBehavior.Restrict);

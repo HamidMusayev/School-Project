@@ -51,9 +51,6 @@ namespace SchoolProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ExamEndDate")
                         .HasColumnType("datetime2");
 
@@ -63,14 +60,12 @@ namespace SchoolProject.Migrations
                     b.Property<bool>("IsCanceled")
                         .HasColumnType("bit");
 
-                    b.Property<int>("TeacherId")
+                    b.Property<int?>("LessonId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("LessonId");
 
                     b.ToTable("Exam", (string)null);
                 });
@@ -181,21 +176,12 @@ namespace SchoolProject.Migrations
 
             modelBuilder.Entity("SchoolProject.Models.Classes.Exam", b =>
                 {
-                    b.HasOne("SchoolProject.Models.Classes.Class", "Class")
+                    b.HasOne("SchoolProject.Models.Classes.Class", "Lesson")
                         .WithMany()
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SchoolProject.Models.Classes.User", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Teacher");
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("SchoolProject.Models.Classes.Lesson", b =>
@@ -240,7 +226,8 @@ namespace SchoolProject.Migrations
                 {
                     b.HasOne("SchoolProject.Models.Classes.Class", "Class")
                         .WithMany()
-                        .HasForeignKey("ClassId");
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Class");
                 });
