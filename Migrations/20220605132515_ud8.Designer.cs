@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolProject.Models.Contexts;
 
@@ -11,9 +12,10 @@ using SchoolProject.Models.Contexts;
 namespace SchoolProject.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20220605132515_ud8")]
+    partial class ud8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,10 +241,15 @@ namespace SchoolProject.Migrations
             modelBuilder.Entity("SchoolProject.Models.Classes.User", b =>
                 {
                     b.HasOne("SchoolProject.Models.Classes.Class", "Class")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("ClassId");
 
                     b.Navigation("Class");
+                });
+
+            modelBuilder.Entity("SchoolProject.Models.Classes.Class", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

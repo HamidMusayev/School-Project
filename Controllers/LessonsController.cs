@@ -6,125 +6,110 @@ using SchoolProject.Models.Contexts;
 
 namespace SchoolProject.Controllers
 {
-    public class StudentsController : Controller
+    public class LessonsController : Controller
     {
         private readonly SchoolContext _context;
 
-        public StudentsController(SchoolContext context)
+        public LessonsController(SchoolContext context)
         {
             _context = context;
         }
 
-        // GET: Students
+        // GET: Lessons
         public async Task<IActionResult> Index()
         {
-            if (_context.Users == null)
+            if (_context.Lessons == null)
             {
                 return NotFound();
             }
 
-            return View(await _context.Users
-                .Where(u => u.Type == Models.Enums.UserType.Tələbə && u.Passive == false)
-                .Include(u => u.Class)
+            return View(await _context.Lessons.Where(l => l.Passive == false)
+                .Include(l => l.Class)
+                .Include(l => l.Teacher)
                 .ToListAsync());
         }
 
-        // GET: Students/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Users == null)
-            {
-                return NotFound();
-            }
-
-            User? user = await _context.Users
-                .Include(u => u.Class)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // GET: Students/Create
-        public async Task<IActionResult> CreateAsync()
+        // GET: Lessons/Create
+        public async Task<IActionResult> Create()
         {
             await SetViewBagData();
             return View();
         }
 
-        // POST: Students/Create
+        // POST: Lessons/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Number,Email,Class")] User user)
+        public async Task<IActionResult> Create([Bind("Id,Name,Passive,Teacher,Class")] Lesson lesson)
         {
-            user.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
-
-            user.Type = Models.Enums.UserType.Tələbə;
+            lesson.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
+            lesson.Teacher = await _context.Users.FindAsync(int.Parse(Request.Form["Teacher"].First()));
 
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(lesson);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(lesson);
         }
 
-        // GET: Students/Edit/5
+        // GET: Lessons/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (id == null || _context.Lessons == null)
+            {
+                return NotFound();
+            }
+
+            Lesson? lesson = await _context.Lessons
+                .Where(l => l.Id == id)
+                .Include(l => l.Class)
+                .Include(l => l.Teacher)
+                .FirstOrDefaultAsync();
+
             await SetViewBagData();
 
-            if (id == null || _context.Users == null)
+            if (lesson == null)
             {
                 return NotFound();
             }
 
-            User? user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return View(user);
+            return View(lesson);
         }
 
         private async Task SetViewBagData()
         {
             ViewBag.Classes = new SelectList(await _context.Classes.Where(c => c.Passive == false).ToListAsync(), "Id", "Name");
+            ViewBag.Teachers = new SelectList(await _context.Users.Where(c => c.Passive == false).ToListAsync(), "Id", "Name");
         }
 
-        // POST: Students/Edit/5
+        // POST: Lessons/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Number,Email,Class,Passive")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Passive,Class,Teacher")] Lesson lesson)
         {
-            if (id != user.Id)
+            if (id != lesson.Id)
             {
                 return NotFound();
             }
 
-            user.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
-
-            user.Type = Models.Enums.UserType.Tələbə;
+            lesson.Class = await _context.Classes.FindAsync(int.Parse(Request.Form["Class"].First()));
+            lesson.Teacher = await _context.Users.FindAsync(int.Parse(Request.Form["Teacher"].First()));
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(lesson);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!LessonExists(lesson.Id))
                     {
                         return NotFound();
                     }
@@ -135,47 +120,49 @@ namespace SchoolProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(lesson);
         }
 
-        // GET: Students/Delete/5
+        // GET: Lessons/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Users == null)
+            if (id == null || _context.Lessons == null)
             {
                 return NotFound();
             }
 
-            User? user = await _context.Users
+            Lesson? lesson = await _context.Lessons
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (lesson == null)
             {
                 return NotFound();
             }
-            return View(user);
+
+            return View(lesson);
         }
 
-        // POST: Students/Delete/5
+        // POST: Lessons/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Users == null)
+            if (_context.Lessons == null)
             {
-                return Problem("Entity set 'SchoolContext.Users'  is null.");
+                return Problem("Entity set 'SchoolContext.Lessons'  is null.");
             }
-            User? user = await _context.Users.FindAsync(id);
-            if (user != null)
+            Lesson? lesson = await _context.Lessons.FindAsync(id);
+            if (lesson != null)
             {
-                _context.Users.Remove(user);
+                _context.Lessons.Remove(lesson);
             }
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool LessonExists(int id)
         {
-            return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Lessons?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

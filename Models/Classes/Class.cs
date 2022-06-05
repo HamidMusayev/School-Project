@@ -13,8 +13,6 @@ namespace SchoolProject.Models.Classes
         public string Name { get; set; }
         [Display(Name = "Passiv")]
         public bool Passive { get; set; }
-
-        public IEnumerable<User>? Users { get; set; }
     }
 
     public partial class Class

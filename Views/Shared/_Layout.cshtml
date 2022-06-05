@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - Hamid Musayev's Project</title>
+	@*<title>@ViewData["Title"] - Hamid Musayev's Project</title>*@
+	<title>@ViewData["Title"]</title>
 
 	<link rel="stylesheet" href="~/assets/css/main/app.css">
 	<link rel="stylesheet" href="~/assets/css/main/app-dark.css">
@@ -59,7 +60,7 @@
 					</li>
 
 					<li class="sidebar-item ">
-						<a href="index.html" class='sidebar-link'>
+						<a asp-controller="Lessons" asp-action="Index" class='sidebar-link'>
 							<i class="bi bi-calendar-fill"></i>
 							<span>Dərslər</span>
 						</a>
