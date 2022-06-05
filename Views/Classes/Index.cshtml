@@ -1,19 +1,18 @@
-﻿@model IEnumerable<User>
+﻿@model IEnumerable<Class>
 
 @{
 	ViewData["Title"] = "Siyahı";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Tələbələr</h1>
+<h1>Siniflər</h1>
 
 <p>
 	<a asp-action="Create">Yenisini əlavə et</a>
 </p>
-
 <div class="card">
 	<div class="card-header">
-		<h4 class="card-title">Bütün tələbələr</h4>
+		<h4 class="card-title">Bütün siniflər</h4>
 	</div>
 	<div class="card-content">
 		<div class="card-body">
@@ -25,16 +24,10 @@
 								@Html.DisplayNameFor(model => model.Name)
 							</th>
 							<th>
-								@Html.DisplayNameFor(model => model.Surname)
+								@Html.DisplayNameFor(model => model.Passive)
 							</th>
 							<th>
-								@Html.DisplayNameFor(model => model.Number)
-							</th>
-							<th>
-								@Html.DisplayNameFor(model => model.Email)
-							</th>
-							<th>
-								@Html.DisplayNameFor(model => model.Class.Name)
+								@Html.DisplayNameFor(model => model.StudentCount)
 							</th>
 							<th></th>
 						</tr>
@@ -47,16 +40,10 @@
 									@Html.DisplayFor(modelItem => item.Name)
 								</td>
 								<td>
-									@Html.DisplayFor(modelItem => item.Surname)
+									@Html.DisplayFor(modelItem => item.Passive)
 								</td>
 								<td>
-									@Html.DisplayFor(modelItem => item.Number)
-								</td>
-								<td>
-									@Html.DisplayFor(modelItem => item.Email)
-								</td>
-								<td>
-									@Html.DisplayFor(modelItem => item.Class.Name)
+									@Html.DisplayFor(modelItem => item.StudentCount)
 								</td>
 								<td>
 									<a asp-action="Edit" asp-route-id="@item.Id">Dəyiş</a> |
@@ -71,5 +58,3 @@
 		</div>
 	</div>
 </div>
-
-

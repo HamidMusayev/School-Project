@@ -1,7 +1,7 @@
-﻿@model SchoolProject.Models.Classes.User
+﻿@model User
 
 @{
-	ViewData["Title"] = "Create";
+	ViewData["Title"] = "Əlavə et";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -34,14 +34,9 @@
 				<span asp-validation-for="Email" class="text-danger"></span>
 			</div>
 			<div class="form-group">
-				<label asp-for="Type" class="control-label"></label>
-				<select asp-for="Type" class="form-control"></select>
-				<span asp-validation-for="Type" class="text-danger"></span>
-			</div>
-			<div class="form-group form-check">
-				<label class="form-check-label">
-					<input class="form-check-input" asp-for="Passive" /> @Html.DisplayNameFor(model => model.Passive)
-				</label>
+				<label asp-for="Class" class="control-label"></label>
+				<select asp-for="Class" asp-items="@ViewBag.Classes" class="form-control"></select>
+				<span asp-validation-for="Class" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<input type="submit" value="Əlavə et" class="btn btn-primary" />

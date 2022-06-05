@@ -18,14 +18,20 @@ namespace SchoolProject.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            ViewBag.StudentCount = _context.Users.Count(u=>u.Type == Models.Enums.UserType.Tələbə && u.Passive == false);
-            ViewBag.TeacherCount = _context.Users.Count(u => u.Type == Models.Enums.UserType.Müəllim && u.Passive == false);
-            ViewBag.ClassCount = _context.Classes.Count(u => u.Passive == false);
-            ViewBag.ExamCount = _context.Exams.Count(u => u.IsCanceled == false);
+            ViewBag.StudentCount = await _context.Users.CountAsync(u => u.Type == Models.Enums.UserType.Tələbə && u.Passive == false);
+            ViewBag.TeacherCount = await _context.Users.CountAsync(u => u.Type == Models.Enums.UserType.Müəllim && u.Passive == false);
+            ViewBag.ClassCount = await _context.Classes.CountAsync(u => u.Passive == false);
+            ViewBag.ExamCount = await _context.Exams.CountAsync(u => u.IsCanceled == false);
 
-            User sessionUser = _context.Users.Where(u => u.Name == "Hamid").ToList()[0];
+            //SESSIONDAN OXUNACAQ, TEST UCUN SECILIB
+            User sessionUser = await _context.Users.SingleAsync(u => u.Name == "Hamid");
+
+            if (sessionUser == null || _context.Users == null)
+            {
+                return NotFound();
+            }
 
             return View(sessionUser);
         }

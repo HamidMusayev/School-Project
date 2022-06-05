@@ -1,0 +1,37 @@
+﻿@model Class
+
+@{
+    ViewData["Title"] = "Detallar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detallar</h1>
+
+<div>
+    <h4>Sinif</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Passive)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Passive)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StudentCount)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StudentCount)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Dəyiş</a> |
+    <a asp-action="Index">Geri qayıt</a>
+</div>

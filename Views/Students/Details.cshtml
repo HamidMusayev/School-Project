@@ -1,7 +1,7 @@
-﻿@model SchoolProject.Models.Classes.User
+﻿@model User
 
 @{
-	ViewData["Title"] = "Details";
+	ViewData["Title"] = "Detallar";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -40,6 +40,12 @@
 		</dt>
 		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.Type)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Class.Name)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Class.Name)
 		</dd>
 		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.Passive)

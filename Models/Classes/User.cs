@@ -24,8 +24,12 @@ namespace SchoolProject.Models.Classes
         [Display(Name = "E-Mail")]
         public string Email { get; set; }
         [Required]
+        [Display(Name = "Tip")]
         public UserType Type { get; set; }
-        public Class Class { get; set; }
+        [Display(Name = "Sinif")]
+        public Class? Class { get; set; }
+        public int? ClassId { get; set; }
+        [Display(Name = "Passiv")]
         public bool Passive { get; set; }
     }
 }
