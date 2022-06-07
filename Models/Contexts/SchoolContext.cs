@@ -9,11 +9,11 @@ namespace SchoolProject.Models.Contexts
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Class> Classes { get; set; }
-        public DbSet<Lesson> Lessons { get; set; }
-        public DbSet<Exam> Exams { get; set; }
-        public DbSet<Result> Results { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<Lesson> Lessons { get; set; }
+        public virtual DbSet<Exam> Exams { get; set; }
+        public virtual DbSet<Result> Results { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
