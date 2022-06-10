@@ -11,19 +11,22 @@ namespace SchoolProject.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHomeService _service;
         private readonly IStudentService _studentService;
+        private readonly IClassService _classService;
 
-        public HomeController(ILogger<HomeController> logger, IHomeService service, IStudentService studentService)
+        public HomeController(ILogger<HomeController> logger, IHomeService service, IStudentService studentService,
+            IClassService classService)
         {
             _logger = logger;
             _service = service;
             _studentService = studentService;
+            _classService = classService;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
             TempData["ActivePage"] = "1";
 
-            HashSet<int> counts = await _service.GetCounts();
+            int[] counts = await _service.GetCounts();
 
             ViewBag.StudentCount = counts.ElementAt(0);
             ViewBag.TeacherCount = counts.ElementAt(1);
@@ -36,6 +39,12 @@ namespace SchoolProject.Controllers
             if (sessionUser == null)
             {
                 //EGER DATABASE BOSDURSA FIRST TIME TEST UCUN ELAVE ET VE SEHIFENI YENILE
+                await _classService.AddAsync(new Class
+                {
+                    Name = "M300",
+                    Passive = false,
+                });
+                
                 await _studentService.AddAsync(new User
                 {
                     Email = "hemidvmusayev@gmail.com",
@@ -43,6 +52,7 @@ namespace SchoolProject.Controllers
                     Surname = "Musayev",
                     Number = "0508218170",
                     Type = Models.Enums.UserType.Müəllim,
+                    ClassId = 1,
                     Passive = false,
                 });
 

@@ -2,6 +2,6 @@
 {
     public interface IHomeService
     {
-        public Task<HashSet<int>> GetCounts();
+        public Task<int[]> GetCounts();
     }
 }

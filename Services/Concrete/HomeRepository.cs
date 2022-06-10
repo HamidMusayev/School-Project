@@ -13,15 +13,18 @@ namespace SchoolProject.Services.Concrete
             _context = context;
         }
 
-        public async Task<HashSet<int>> GetCounts()
+        public async Task<int[]> GetCounts()
         {
-            return new()
-            {
-                await _context.Users.CountAsync(u => u.Type == Models.Enums.UserType.Tələbə && u.Passive == false),
-                await _context.Users.CountAsync(u => u.Type == Models.Enums.UserType.Müəllim && u.Passive == false),
-                await _context.Classes.CountAsync(u => u.Passive == false),
-                await _context.Exams.CountAsync(u => u.IsCanceled == false),
-            };
+            var counts = new int[4];
+
+            counts[0] = await _context.Users.CountAsync(u =>
+                u.Type == Models.Enums.UserType.Tələbə && u.Passive == false);
+            counts[1] = await _context.Users.CountAsync(u =>
+                u.Type == Models.Enums.UserType.Müəllim && u.Passive == false);
+            counts[2] = await _context.Classes.CountAsync(u => u.Passive == false);
+            counts[3] = await _context.Exams.CountAsync(u => u.IsCanceled == false);
+            
+            return counts;
         }
     }
 }
