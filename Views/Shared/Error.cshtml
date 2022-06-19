@@ -1,38 +1,36 @@
 ﻿@model ErrorViewModel
 @{
-	ViewData["Title"] = "Xəta";
+    ViewData["Title"] = "Xəta";
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - SchoolProject</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - SchoolProject</title>
 
-	<link rel="stylesheet" href="~/assets/css/main/app.css">
-	<link rel="stylesheet" href="~/assets/css/main/app-dark.css">
+    <link rel="stylesheet" href="~/assets/css/main/app.css">
+    <link rel="stylesheet" href="~/assets/css/main/app-dark.css">
 </head>
 <body>
-	@if (Model.ShowRequestId)
-	{
-		<p>
-			<strong>Request ID:</strong> <code>@Model.RequestId</code>
-		</p>
-	}
-	<div id="error">
-		<div class="error-page container">
-			<div class="col-md-8 col-12 offset-md-2">
-				<div class="text-center">
-					<img class="img-error" style="max-width: 60%" src="~/assets/images/samples/error-404.svg" alt="Not Found">
-					<h1 class="error-title">XƏTA BAŞ VERDİ</h1>
-					<p class='fs-5 text-gray-600'>Bu səhifə mövcud deyil.</p>
-					<a asp-action="Index" asp-controller="Home" class="btn btn-lg btn-outline-primary mt-3">Əsas səhifəyə qayıt</a>
-				</div>
-			</div>
-		</div>
-	</div>
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+<div id="error">
+    <div class="error-page container">
+        <div class="col-md-8 col-12 offset-md-2">
+            <div class="text-center">
+                <img class="img-error" style="max-width: 60%" src="~/assets/images/samples/error-404.svg" alt="Not Found">
+                <h1 class="error-title">XƏTA BAŞ VERDİ</h1>
+                <p class="fs-5 text-gray-600">Bu səhifə mövcud deyil.</p>
+                <a asp-action="Index" asp-controller="Home" class="btn btn-lg btn-outline-primary mt-3">Əsas səhifəyə qayıt</a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-
-

@@ -3,12 +3,12 @@ using SchoolProject.Models.Contexts;
 using SchoolProject.Services.Abstract;
 using SchoolProject.Services.Concrete;
 
-WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<SchoolContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IHomeService, HomeRepository>();
 builder.Services.AddScoped<IStudentService, StudentRepository>();
@@ -16,7 +16,7 @@ builder.Services.AddScoped<IClassService, ClassRepository>();
 builder.Services.AddScoped<IExamService, ExamRepository>();
 builder.Services.AddScoped<ILessonService, LessonRepository>();
 
-WebApplication? app = builder.Build();
+var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -40,7 +40,7 @@ app.UseAuthorization();
 //app.MapGet("/hi", () => "Hello!");
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

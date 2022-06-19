@@ -1,8 +1,7 @@
-﻿namespace SchoolProject.Models.Enums
+﻿namespace SchoolProject.Models.Enums;
+
+public enum UserType
 {
-    public enum UserType
-    {
-        Müəllim,
-        Tələbə
-    }
+    Müəllim,
+    Tələbə
 }

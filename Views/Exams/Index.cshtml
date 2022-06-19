@@ -1,83 +1,83 @@
 ﻿@model IEnumerable<Exam>
 
 @{
-	ViewData["Title"] = "Siyahı";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Siyahı";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>İmtahanlar</h1>
 
 <p>
-	<a asp-action="Create">Yenisini əlavə et</a>
+    <a asp-action="Create">Yenisini əlavə et</a>
 </p>
 
 <div class="card">
-	<div class="card-header">
-		<h4 class="card-title">Bütün tələbələr</h4>
-	</div>
-	<div class="card-content">
-		<div class="card-body">
-			<div class="table-responsive">
-				<table class="table table-lg">
-					<thead>
-						<tr>
-							<th>
-								@Html.DisplayNameFor(model => model.ExamStartDate)
-							</th>
-							<th>
-								@Html.DisplayNameFor(model => model.ExamEndDate)
-							</th>
-							<th>
-								@Html.DisplayNameFor(model => model.Lesson!.Name)
-							</th>
-							<th>
-								Müəllim adı
-								@*@Html.DisplayNameFor(model => model.Lesson!.Teacher!.Name)*@
-							</th>
-							<th>
-								@Html.DisplayNameFor(model => model.Lesson!.Class!.Name)
-							</th>
-							<th>
-								@Html.DisplayNameFor(model => model.IsCanceled)
-							</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach (var item in Model)
-						{
-							<tr>
-								<td>
-									@Html.DisplayFor(modelItem => item.ExamStartDate)
-								</td>
-								<td>
-									@Html.DisplayFor(modelItem => item.ExamEndDate)
-								</td>
-								<td>
-									@Html.DisplayFor(modelItem => item.Lesson!.Name)
-								</td>
-								<td>
-									@Html.DisplayFor(modelItem => item.Lesson!.Teacher!.Name)
-								</td>
-								<td>
-									@Html.DisplayFor(modelItem => item.Lesson!.Class!.Name)
-								</td>
-								<td>
-									@Html.DisplayFor(modelItem => item.IsCanceled)
-								</td>
-								<td>
-									<a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
+    <div class="card-header">
+        <h4 class="card-title">Bütün tələbələr</h4>
+    </div>
+    <div class="card-content">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-lg">
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ExamStartDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ExamEndDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Lesson!.Name)
+                        </th>
+                        <th>
+                            Müəllim adı
+                            @*@Html.DisplayNameFor(model => model.Lesson!.Teacher!.Name)*@
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Lesson!.Class!.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsCanceled)
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExamStartDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExamEndDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Lesson!.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Lesson!.Teacher!.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Lesson!.Class!.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsCanceled)
+                            </td>
+                            <td>
+                                <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
 
-									@if (!item.IsCanceled)
-									{
-										<a asp-action="Cancel" asp-route-id="@item.Id"> | Ləğv et</a>
-									}
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+                                @if (!item.IsCanceled)
+                                {
+                                    <a asp-action="Cancel" asp-route-id="@item.Id"> | Ləğv et</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

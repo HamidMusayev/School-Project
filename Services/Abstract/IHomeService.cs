@@ -1,7 +1,6 @@
-﻿namespace SchoolProject.Services.Abstract
+﻿namespace SchoolProject.Services.Abstract;
+
+public interface IHomeService
 {
-    public interface IHomeService
-    {
-        public Task<int[]> GetCounts();
-    }
+    public Task<int[]> GetCounts();
 }
